@@ -7,6 +7,7 @@ const path = require('path');
 function main(workspace, command, username, sshkey) {
     console.log(`main(${workspace}, ${command}, ${username})`);
     fs.writeFileSync('sshkey', sshkey, 'utf8');
+    fs.chmodSync(sshkey, 0o600);
     const jailName = generateJailName();
     const keyPair = generateKeyPair(jailName);
     const jailIP = createJail(jailName, keyPair.pub, username);
@@ -71,7 +72,7 @@ function rsyncJail(source, jailIP, sshkey) {
 }
 
 function jailTask(jailIP, workdir, sshkey, task) {
-    console.log(`rsyncJail(${jailIP}, ${workdir}, ${sshkey}, ${task})`);
+    console.log(`jailTask(${jailIP}, ${workdir}, ${sshkey}, ${task})`);
     spawnSync('ssh', [
         '-i', sshkey,
         '-o', 'StrictHostKeyChecking=no',
