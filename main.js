@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 function main(workspace, command, username, sshkey) {
+    console.log(`main(${workspace}, ${command}, ${username})`);
     fs.writeFileSync('sshkey', sshkey, 'utf8');
     const jailName = generateJailName();
     const keyPair = generateKeyPair(jailName);
@@ -14,6 +15,7 @@ function main(workspace, command, username, sshkey) {
 }
 
 function createJail(name, pubkey, username) {
+    console.log(`createJail(${name}, ${pubkey}, ${username})`);
     const pubkeyMaterial = fs.readFileSync(pubkey, 'utf8');
     const result = spawnSync("ssh", [
         '-i', 'sshkey',
@@ -25,6 +27,7 @@ function createJail(name, pubkey, username) {
 }
 
 function destroyJail(name, username) {
+    console.log(`destroyJail(${name}, ${username})`);
     const result = spawnSync("ssh", [
         '-i', 'sshkey',
         '-o', 'StrictHostKeyChecking=no',
@@ -34,10 +37,12 @@ function destroyJail(name, username) {
 }
 
 function generateJailName() {
+    console.log(`generateJailName()`);
     return crypto.randomUUID();
 }
 
 function generateKeyPair(name) {
+    console.log(`generateKeyPair(${name})`);
     const path = `${name}.ssh`;
     spawnSync("ssh-keygen", [
         '-t', 'ed25519',
@@ -52,6 +57,7 @@ function generateKeyPair(name) {
 }
 
 function rsyncJail(source, jailIP, sshkey) {
+    console.log(`rsyncJail(${source}, ${jailIP}, ${sshkey})`);
     spawnSync('rsync', [
         '-avz', '--no-owner', '--no-group',
         '-e', `ssh -i ${sshkey} -o StrictHostKeyChecking=no`,
@@ -65,6 +71,7 @@ function rsyncJail(source, jailIP, sshkey) {
 }
 
 function jailTask(jailIP, workdir, sshkey, task) {
+    console.log(`rsyncJail(${jailIP}, ${workdir}, ${sshkey}, ${task})`);
     spawnSync('ssh', [
         '-i', sshkey,
         '-o', 'StrictHostKeyChecking=no',
