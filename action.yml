@@ -1,0 +1,13 @@
+name: 'BeastCI'
+description: 'Test workloads against FreeBSD'
+inputs:
+  command:
+    description: 'The command to run in your FreeBSD Jail'
+    required: false
+    default: 'uname -a'
+  sshkey:
+    description: 'An SSH Private key registered with your BeastCI account'
+    required: true
+runs:
+  using: 'node20'
+  main: 'main.js'
