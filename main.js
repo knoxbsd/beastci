@@ -6,9 +6,7 @@ const path = require('path');
 
 function main(workspace, command, username, sshkey) {
     console.log(`main(${workspace}, ${command}, ${username})`);
-    console.log(sshkey);
-    fs.writeFileSync('sshkey', sshkey, 'utf8');
-    fs.chmodSync('sshkey', 0o600);
+    fs.writeFileSync('sshkey', sshkey, {encoding: 'utf8', mode: 0o600, flush: true});
     const jailName = generateJailName();
     const keyPair = generateKeyPair(jailName);
     const jailIP = createJail(jailName, keyPair.pub, username);
@@ -25,6 +23,7 @@ function createJail(name, pubkey, username) {
         `${username}@freebsd.number1engineering.com`,
         'sudo', 'agent', 'create', name
     ], {input: pubkeyMaterial, encoding: 'utf8'});
+    console.log(result.stderr);
     return result.stdout.trimEnd();
 }
 
