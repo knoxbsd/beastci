@@ -6,7 +6,7 @@ const path = require('path');
 
 function main(workspace, command, username, sshkey) {
     console.log(`main(${workspace}, ${command}, ${username})`);
-    fs.writeFileSync('sshkey', sshkey, {encoding: 'utf8', mode: 0o600, flush: true});
+    fs.writeFileSync('sshkey', sshkey.trimEnd(), {encoding: 'utf8', mode: 0o600, flush: true});
     const jailName = generateJailName();
     const keyPair = generateKeyPair(jailName);
     const jailIP = createJail(jailName, keyPair.pub, username);
