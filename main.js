@@ -20,7 +20,7 @@ function createJail(name, pubkey, username) {
         '-i', 'sshkey',
         '-o', 'StrictHostKeyChecking=no',
         `${username}@freebsd.number1engineering.com`,
-        'sudo', 'agent', 'create', name
+        'sudo', 'jail-agent', 'create', name
     ], {input: pubkeyMaterial, encoding: 'utf8'});
     return result.stdout.trimEnd();
 }
@@ -30,7 +30,7 @@ function destroyJail(name, username) {
         '-i', 'sshkey',
         '-o', 'StrictHostKeyChecking=no',
         `${username}@freebsd.number1engineering.com`,
-        'sudo', 'agent', 'destroy', name
+        'sudo', 'jail-agent', 'destroy', name
     ]);
 }
 
